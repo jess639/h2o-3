@@ -47,7 +47,7 @@ public class AstDdply extends AstPrimitive {
     AstFunction scope = env._scope;  // Current execution scope; needed to lookup variables
 
     // Pass 1: Find all the groups (and count rows-per-group)
-    IcedHashMap<AstGroup.G, String> gss = AstGroup.doGroups(fr, gbCols, AstGroup.aggNRows());
+    IcedHashMap<AstGroup.G, AstGroup.G> gss = AstGroup.doGroups(fr, gbCols, AstGroup.aggNRows());
     final AstGroup.G[] grps = gss.keySet().toArray(new AstGroup.G[gss.size()]);
 
     // apply an ORDER by here...
@@ -121,10 +121,10 @@ public class AstDdply extends AstPrimitive {
   // Chunk layout, except each Chunk will be the filter rows numbers; a list
   // of the Chunk-relative row-numbers for that group in an original data Chunk.
   private static class BuildGroup extends MRTask<BuildGroup> {
-    final IcedHashMap<AstGroup.G, String> _gss;
+    final IcedHashMap<AstGroup.G, AstGroup.G> _gss;
     final int[] _gbCols;
 
-    BuildGroup(int[] gbCols, IcedHashMap<AstGroup.G, String> gss) {
+    BuildGroup(int[] gbCols, IcedHashMap<AstGroup.G, AstGroup.G> gss) {
       _gbCols = gbCols;
       _gss = gss;
     }
